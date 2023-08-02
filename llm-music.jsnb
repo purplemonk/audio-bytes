@@ -9,9 +9,9 @@
   "jsnbversion": "v0.1",
   "cells": [
     {
-      "code": "<h1>LLM for Generating Music</h1>\nThis is an experiment to generate Carnatic music using LLM. Broad steps inclide:\n<ol>\n<li>Read through .wav/mp3 files </li>\n<li>Generat spectrum graph </li>\n<li>Input spectrum into an RNN (LSTM/Transformer) or an HMM</li>\n<li>Generate spectrum through the RNN/HMM</li>\n<li>Convert spectrum to audio data</li>\n</ol>",
+      "code": "<h1>LLM for Generating Music</h1>\nThis is an experiment to generate Carnatic music using LLM. Broad steps inclide:\n<ol>\n<li>Read through .wav/mp3 files </li>\n<li>Generate spectrum graph </li>\n<li>Input spectrum into an RNN (LSTM/Transformer) or an HMM</li>\n<li>Generate spectrum through the RNN/HMM</li>\n<li>Convert spectrum to audio data</li>\n</ol>",
       "status": "",
-      "output": "<h1>LLM for Generating Music</h1>\nThis is an experiment to generate Carnatic music using LLM. Broad steps inclide:\n<ol>\n<li>Read through .wav/mp3 files </li>\n<li>Generat spectrum graph </li>\n<li>Input spectrum into an RNN (LSTM/Transformer) or an HMM</li>\n<li>Generate spectrum through the RNN/HMM</li>\n<li>Convert spectrum to audio data</li>\n</ol>",
+      "output": "<h1>LLM for Generating Music</h1>\nThis is an experiment to generate Carnatic music using LLM. Broad steps inclide:\n<ol>\n<li>Read through .wav/mp3 files </li>\n<li>Generate spectrum graph </li>\n<li>Input spectrum into an RNN (LSTM/Transformer) or an HMM</li>\n<li>Generate spectrum through the RNN/HMM</li>\n<li>Convert spectrum to audio data</li>\n</ol>",
       "type": "html"
     }
   ],
