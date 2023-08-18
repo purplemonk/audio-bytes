@@ -2327,20 +2327,40 @@ if (typeof module !== 'undefined' && module && module.exports) {
 
 if(window){
     window.dsp={};
-    dsp.DSP=DSP;
-    dsp.DFT=DFT;
-    window.FFT = FFT;
-    window.RFFT = RFFT;
-    window.Sampler = Sampler;
-    window.Oscillator = Oscillator;
-    window.ADSR= ADSR;
-    window.IIRFilter= IIRFilter;
-    window.IIRFilter2= IIRFilter2;
-    window.WindowFunction=  WindowFunction;
-    window.sinh= sinh;
-    window.Biquad= Biquad;
-    window.GraphicalEq= GraphicalEq;
-    window.MultiDelay= MultiDelay;
-    window.SingleDelay= SingleDelay;
-    window.Reverb= Reverb;
+    window.dsp.DSP=DSP;
+    window.dsp.DFT=DFT;
+    window.dsp.FFT = FFT;
+    window.dsp.RFFT = RFFT;
+    window.dsp.Sampler = Sampler;
+    window.dsp.Oscillator = Oscillator;
+    window.dsp.ADSR= ADSR;
+    window.dsp.IIRFilter= IIRFilter;
+    window.dsp.IIRFilter2= IIRFilter2;
+    window.dsp.WindowFunction=  WindowFunction;
+    window.dsp.sinh= sinh;
+    window.dsp.Biquad= Biquad;
+    window.dsp.GraphicalEq= GraphicalEq;
+    window.dsp.MultiDelay= MultiDelay;
+    window.dsp.SingleDelay= SingleDelay;
+    window.dsp.Reverb= Reverb;
+}
+
+Array.prototype.spectrogram=function(sample_rate,segment_size,hop_size){
+// segment_size: Number of samples per segment
+// hop_size: Number of samples to move between segments
+	  const num_segments = Math.floor((signal.length - segment_size) / hop_size);
+    spectrogram = [];
+    for (let i = 0; i < num_segments; i++) {
+      const startIdx = i * hop_size;
+      const endIdx = startIdx + segment_size;
+      const segment = this.slice(startIdx, endIdx);
+
+      const windowed_segment = segment.map((sample, idx) => sample * 0.5 * (1 - Math.cos((2 * Math.PI * idx) / segment_size)));
+      const fft = new FFT(segment_size, sample_rate);
+      fft.forward(windowed_segment);
+
+      const spectrum = fft.spectrum;
+      spectrogram.push(spectrum);
+    }
+  return spectrogram;
 }
