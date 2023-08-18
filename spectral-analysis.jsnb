@@ -10,20 +10,32 @@
   "cells": [
     {
       "code": "//Loading the DSP library\nload_script(\"https://raw.githubusercontent.com/purplemonk/audio-bytes/main/dsp.js\",false)\nshow(\"Loaded\")",
-      "status": "[1]<br><span style=\"font-size:8px\">548ms<span></span></span>",
+      "status": "[1]<br><span style=\"font-size:8px\">413ms<span></span></span>",
       "output": "Loaded <br>",
       "type": "code"
     },
     {
       "code": "\nshow('<input type=\"file\" id=\"file\"></input>')\nget_dom('file').addEventListener(\"change\",event => { \n  \tconst fr = new FileReader(); \n    fr.onload=async function(event)\n\t\t{ \n\t  \t\t\t\tarray_buffer=event.target.result; \n\t  const ctx = new AudioContext();\n\n\t\t\tctx.decodeAudioData(array_buffer).then(audio=>{\n\n\t\t\t\tsignal=Array.from(audio.getChannelData(0));\n\n\t\t\t\t sample_rate = audio.sampleRate;\n\t\t\t\tshow(\"loaded signal. samplerate:\",sample_rate);\n\n\t\t\t})\n\t  \t\t\t\talert(\"loaded data\");\n\t  \t};\n\tfr.readAsArrayBuffer( get_dom('file').files[0]); \n}); ",
-      "status": "[2]<br><span style=\"font-size:8px\">1ms<span></span></span>",
+      "status": "[2]<br><span style=\"font-size:8px\">0ms<span></span></span>",
       "output": "<input type=\"file\" id=\"file\"> <br><p class=\"error\">!! loaded data !!</p> <br>loaded signal. samplerate: 44100 <br>",
       "type": "code"
     },
     {
       "code": "//sample_rate: 44100. samples per second\n// segment_size: 1024. Number of samples per segment\n// hop_size: 512, Number of samples to move between segments\nspectrogram=signal.spectrogram(sample_rate,1024,512)",
-      "status": "[3]<br><span style=\"font-size:8px\">47.346s<span></span></span>",
+      "status": "[3]<br><span style=\"font-size:8px\">37.55s<span></span></span>",
       "output": "<p class=\"error\">Object too large to show.</p><br>",
+      "type": "code"
+    },
+    {
+      "code": "spectrogram_string=spectrogram.map(x=>x.join(',')).join(\"\\n\")\n\"done\"",
+      "status": "[4]<br><span style=\"font-size:8px\">5.953s<span></span></span>",
+      "output": "done <br>",
+      "type": "code"
+    },
+    {
+      "code": "download_string(spectrogram_string,\"spectrum.csv\")",
+      "status": "[5]<br><span style=\"font-size:8px\">10.702s<span></span></span>",
+      "output": "",
       "type": "code"
     },
     {
