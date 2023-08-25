@@ -27,9 +27,15 @@
       "type": "html"
     },
     {
-      "code": "get_contour_from_spectrum= \n  spectrum=>{\n  \t\tconst transform=Math.log;\n\t\tspectrum=spectrum.map(x=>x.map(transform));\n\t\tlet contour_data=[[],[],[]];\n\t\tconst display_granularity=1000;\n\t\tfor(let i=0;i<spectrum.length;i=i+display_granularity){\n\t\t  for(let j=0;j<30;j=j+1){\n\t\t\t   contour_data[0].push(i);\n\t\t\t\tcontour_data[1].push(j);\n\t\t\t\t  contour_data[2].push(spectrum[i][j]==-Infinity?-20:spectrum[i][j]);\n\t\t  }\n\t\t}\n\t\t return contour_data;\n}\n\nget_dom('file').addEventListener(\"change\",event => { \n  \tconst fr = new FileReader(); \n    fr.onload=async function(event)\n\t\t{ \n\t  \t\t\t\tarray_buffer=event.target.result; \n\t  const ctx = new AudioContext();\n\n\t\t\tctx.decodeAudioData(array_buffer).then(audio=>{\n\n\t\t\t\tsignal=Array.from(audio.getChannelData(0));\n\n\t\t\t\t sample_rate = audio.sampleRate;\n\t\t\t  segment_size=get_dom(\"segment_size\").value;\n\t\t\t  hop_size=get_dom(\"hop_size\").value;\n\t\t\t  \n\t\t\t\tshow(\"Loaded signal. Sample rate:\",sample_rate);\n\t\t\t  try{\n\t\t\t   \tspectrogram=signal.spectrogram(sample_rate,1024,512)\n\t\t\t\tcontour=get_contour_from_spectrum(spectrum);\n\t\t\t\tcontour.plot(\"contour\",\"plot\");\n\t\t\t  }catch(e){\n\t\t\t\talert(\"Error while calculating spectrogram\");\n\t\t\t  }\n\n\t\t\t})\n\t  \t};\n\tfr.readAsArrayBuffer( get_dom('file').files[0]); \n}); ",
-      "status": "[9]<br><span style=\"font-size:8px\">0ms<span></span></span>",
-      "output": "",
+      "code": "get_contour_from_spectrum= \n  spectrum=>{\n  \t\tconst transform=Math.log;\n\t\tspectrum=spectrum.map(x=>x.map(transform));\n\t\tlet contour_data=[[],[],[]];\n\t\tconst display_granularity=1000;\n\t\tfor(let i=0;i<spectrum.length;i=i+display_granularity){\n\t\t  for(let j=0;j<30;j=j+1){\n\t\t\t   contour_data[0].push(i);\n\t\t\t\tcontour_data[1].push(j);\n\t\t\t\t  contour_data[2].push(spectrum[i][j]==-Infinity?-20:spectrum[i][j]);\n\t\t  }\n\t\t}\n\t\t return contour_data;\n}\n\nget_dom('file').addEventListener(\"change\",event => { \n  \tconst fr = new FileReader(); \n    fr.onload=async function(event)\n\t\t{ \n\t  \t\t\t\tarray_buffer=event.target.result; \n\t \t\t\t const ctx = new AudioContext();\n\n\t\t\tctx.decodeAudioData(array_buffer).then(audio=>{\n\n\n\t\t\t  \n\t\t\t\tshow(\"Loaded signal. Sample rate:\",sample_rate);\n\t\t\t  try{\n\t\t\t\t\t\t\t\tsignal=Array.from(audio.getChannelData(0));\n\n\t\t\t\t sample_rate = audio.sampleRate;\n\t\t\t  segment_size=parseInt(get_dom(\"segment-size\").value);\n\t\t\t  hop_size=parseInt(get_dom(\"hop-size\").value);\n\t\t\t   \tspectrogram=signal.spectrogram(sample_rate,1024,512)\n\t\t\t\tcontour=get_contour_from_spectrum(spectrum);\n\t\t\t\tcontour.plot(\"contour\",\"plot\");\n\t\t\t  }catch(e){\n\t\t\t\talert(\"Error while calculating spectrogram\");\n\t\t\t  }\n\n\t\t\t})\n\t  \t};\n\tfr.readAsArrayBuffer( get_dom('file').files[0]); \n}); ",
+      "status": "[19]<br><span style=\"font-size:8px\">1ms<span></span></span>",
+      "output": "Loaded signal. Sample rate: 44100 <br><p class=\"error\">!! Error while calculating spectrogram !!</p> <br>Loaded signal. Sample rate: 44100 <br><p class=\"error\">!! Error while calculating spectrogram !!</p> <br>",
+      "type": "code"
+    },
+    {
+      "code": "get_dom('file')",
+      "status": "[14]<br><span style=\"font-size:8px\">2ms<span></span></span>",
+      "output": "{} <br>",
       "type": "code"
     },
     {
@@ -37,8 +43,14 @@
       "status": "[6]<br><span style=\"font-size:8px\">0ms<span></span></span>",
       "output": "1024 <br>",
       "type": "code"
+    },
+    {
+      "code": "contour",
+      "status": "[-]",
+      "output": "<p class=\"error\">contour is not defined</p>",
+      "type": "code"
     }
   ],
   "source": "https://github.com/gopi-suvanam/jsnb",
-  "run_on_load": false
+  "run_on_load": true
 }
