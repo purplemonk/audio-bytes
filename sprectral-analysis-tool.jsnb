@@ -1,0 +1,44 @@
+{
+  "metadata": {
+    "name": "Untitled Notebook",
+    "language_info": {
+      "name": "JavaScipt",
+      "version": "8.0"
+    }
+  },
+  "jsnbversion": "v0.1",
+  "cells": [
+    {
+      "code": "<h1>Simple Tool to do Spctral Analysis</h1>",
+      "status": "",
+      "output": "<h1>Simple Tool to do Spctral Analysis</h1>",
+      "type": "html"
+    },
+    {
+      "code": "//Loading the DSP library\nlet loading=load_script(\"https://raw.githubusercontent.com/purplemonk/audio-bytes/main/dsp.js\",false)\nif(loading) show(\"Loaded the DSP library\");\nelse show(\"Error loading the DSP library\");\n",
+      "status": "[1]<br><span style=\"font-size:8px\">772ms<span></span></span>",
+      "output": "Loaded the DSP library <br>",
+      "type": "code"
+    },
+    {
+      "code": "<h3>Upload an Audio File</h3>\n<input type=\"file\" id=\"file\"></input>\n<label for=\"segment-size\">Segment Size</label>\n<input type=\"number\" id=\"segment-size\" value=1024></input>\n<label for=\"hop-size\">Hop Size</label>\n<input type=\"number\" id=\"hop-size\" value=512></input>\n<div id=\"plot\" style=\"width:100%;height:300px\"></div>",
+      "status": "",
+      "output": "<h3>Upload an Audio File</h3>\n<input type=\"file\" id=\"file\">\n<label for=\"segment-size\">Segment Size</label>\n<input type=\"number\" id=\"segment-size\" value=\"1024\">\n<label for=\"hop-size\">Hop Size</label>\n<input type=\"number\" id=\"hop-size\" value=\"512\">\n<div id=\"plot\" style=\"width:100%;height:300px\"></div>",
+      "type": "html"
+    },
+    {
+      "code": "get_contour_from_spectrum= \n  spectrum=>{\n  \t\tconst transform=Math.log;\n\t\tspectrum=spectrum.map(x=>x.map(transform));\n\t\tlet contour_data=[[],[],[]];\n\t\tconst display_granularity=1000;\n\t\tfor(let i=0;i<spectrum.length;i=i+display_granularity){\n\t\t  for(let j=0;j<30;j=j+1){\n\t\t\t   contour_data[0].push(i);\n\t\t\t\tcontour_data[1].push(j);\n\t\t\t\t  contour_data[2].push(spectrum[i][j]==-Infinity?-20:spectrum[i][j]);\n\t\t  }\n\t\t}\n\t\t return contour_data;\n}\n\nget_dom('file').addEventListener(\"change\",event => { \n  \tconst fr = new FileReader(); \n    fr.onload=async function(event)\n\t\t{ \n\t  \t\t\t\tarray_buffer=event.target.result; \n\t  const ctx = new AudioContext();\n\n\t\t\tctx.decodeAudioData(array_buffer).then(audio=>{\n\n\t\t\t\tsignal=Array.from(audio.getChannelData(0));\n\n\t\t\t\t sample_rate = audio.sampleRate;\n\t\t\t  segment_size=get_dom(\"segment_size\").value;\n\t\t\t  hop_size=get_dom(\"hop_size\").value;\n\t\t\t  \n\t\t\t\tshow(\"Loaded signal. Sample rate:\",sample_rate);\n\t\t\t  try{\n\t\t\t   \tspectrogram=signal.spectrogram(sample_rate,1024,512)\n\t\t\t\tcontour=get_contour_from_spectrum(spectrum);\n\t\t\t\tcontour.plot(\"contour\",\"plot\");\n\t\t\t  }catch(e){\n\t\t\t\talert(\"Error while calculating spectrogram\");\n\t\t\t  }\n\n\t\t\t})\n\t  \t};\n\tfr.readAsArrayBuffer( get_dom('file').files[0]); \n}); ",
+      "status": "[9]<br><span style=\"font-size:8px\">0ms<span></span></span>",
+      "output": "",
+      "type": "code"
+    },
+    {
+      "code": "segment_size=get_dom(\"segment-size\").value;\n",
+      "status": "[6]<br><span style=\"font-size:8px\">0ms<span></span></span>",
+      "output": "1024 <br>",
+      "type": "code"
+    }
+  ],
+  "source": "https://github.com/gopi-suvanam/jsnb",
+  "run_on_load": false
+}
