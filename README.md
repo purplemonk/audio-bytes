@@ -1,5 +1,5 @@
 #jugalbandhi
-music and anything audio for the Indian diaspora!
+music and anything audio for the Indian community!
 
 #carnatic music LLM
 drive link for sample music => https://drive.google.com/drive/folders/1Dk4Dyctcew3Kd0MJ9ewn1lnbEx6mb5U9?usp=drive_link
