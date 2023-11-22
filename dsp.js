@@ -2355,7 +2355,8 @@ Array.prototype.spectrogram=function(sample_rate,segment_size,hop_size){
       const endIdx = startIdx + segment_size;
       const segment = this.slice(startIdx, endIdx);
 
-      const windowed_segment = segment.map((sample, idx) => sample * 0.5 * (1 - Math.cos((2 * Math.PI * idx) / segment_size)));
+      const windowed_segment = segment;//.map((sample, idx) => sample * 0.5 * (1 - Math.cos((2 * Math.PI * idx) / segment_size)));
+	//This is windowing.. amy not be needed.. will have to do more research.. 
       const fft = new FFT(segment_size, sample_rate);
       fft.forward(windowed_segment);
 
@@ -2363,4 +2364,18 @@ Array.prototype.spectrogram=function(sample_rate,segment_size,hop_size){
       spectrogram.push(spectrum);
     }
   return spectrogram;
+}
+
+Array.prototype.synthesis=function(sample_rate,segment_size,hop_size){
+// segment_size: Number of samples per segment
+// hop_size: Number of samples to move between segments
+	  
+    let buffer = [];
+    const num_segments=this.length;
+    for (let i = 0; i < num_segments; i++) {
+      const fft = new FFT(segment_size, sample_rate);
+      const segment fft.inverse(this[i));
+      buffer=buffer.concst(segment);
+    }
+  return buffer;
 }
