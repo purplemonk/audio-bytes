@@ -2374,7 +2374,7 @@ Array.prototype.synthesis=function(sample_rate,segment_size,hop_size){
     const num_segments=this.length;
     for (let i = 0; i < num_segments; i++) {
       const fft = new FFT(segment_size, sample_rate);
-      const segment = fft.inverse(this[i));
+      const segment = fft.inverse(this[i]);
       buffer=buffer.concst(segment);
     }
   return buffer;
