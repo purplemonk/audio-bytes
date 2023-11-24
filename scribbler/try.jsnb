@@ -9,9 +9,9 @@
   "jsnbversion": "v0.1",
   "cells": [
     {
-      "code": "hi Gopi how are you doing?",
-      "status": "[-]",
-      "output": "<p class=\"error\">Unexpected identifier 'Gopi'</p>",
+      "code": "load_script(\"https://purplemonk.github.io/audio-bytes/dsp.js\")",
+      "status": "[1]<br><span style=\"font-size:8px\">2ms<span></span></span>",
+      "output": "{} <br>",
       "type": "code"
     }
   ],
