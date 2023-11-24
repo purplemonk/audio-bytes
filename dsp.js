@@ -2345,13 +2345,13 @@ if(window){
     window.dsp.Reverb= Reverb;
 }
 
-Array.prototype.spectrogram=function(sample_rate,segment_size,hop_size){
+Array.prototype.spectrogram=function(sample_rate,segment_size){
 // segment_size: Number of samples per segment
 // hop_size: Number of samples to move between segments
-	  const num_segments = Math.floor((signal.length - segment_size) / hop_size);
+	  const num_segments = Math.floor((signal.length - segment_size) / segment_size);
     spectrogram = [];
     for (let i = 0; i < num_segments; i++) {
-      const startIdx = i * hop_size;
+      const startIdx = i * segment_size;
       const endIdx = startIdx + segment_size;
       const segment = this.slice(startIdx, endIdx);
 
@@ -2375,6 +2375,7 @@ Array.prototype.synthesis=function(sample_rate,segment_size,hop_size){
     for (let i = 0; i < num_segments; i++) {
       const fft = new FFT(segment_size, sample_rate);
       const segment = fft.inverse(this[i]);
+
       buffer=buffer.concat(segment);
     }
   return buffer;
