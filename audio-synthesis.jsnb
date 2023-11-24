@@ -1,0 +1,62 @@
+{
+  "metadata": {
+    "name": "FFT and Synthesis",
+    "language_info": {
+      "name": "JavaScipt",
+      "version": "8.0"
+    }
+  },
+  "jsnbversion": "v0.1",
+  "cells": [
+    {
+      "code": "//Loading library for doing FFT!\nload_script(\"https://purplemonk.github.io/audio-bytes/dsp.js\",false)",
+      "status": "[11]<br><span style=\"font-size:8px\">173ms<span></span></span>",
+      "output": "function(sample_rate,segment_size,hop_size){\n// segment_size: Number of samples per segment\n// hop_size: Number of samples to move between segments\n\t  \n    let buffer = [];\n    const num_segments=this.length;\n    for (let i = 0; i &lt; num_segments; i++) {\n      const fft = new FFT(segment_size, sample_rate);\n      const segment = fft.inverse(this[i]);\n\n      buffer=buffer.concat(segment);\n    }\n  return buffer;\n} <br>",
+      "type": "code"
+    },
+    {
+      "code": "//Code for uploading file and coverting audio file to an array\nshow('<input type=\"file\" id=\"file\"></input>')\nget_dom('file').addEventListener(\"change\",event => { \n  \tconst fr = new FileReader(); \n    fr.onload=async function(event)\n\t\t{ \n\t  \t\t\t\tarray_buffer=event.target.result; \n\t  const ctx = new AudioContext();\n\n\t\t\tctx.decodeAudioData(array_buffer).then(audio=>{\n\n\t\t\t\tsignal=Array.from(audio.getChannelData(0));\n\n\t\t\t\t sample_rate = audio.sampleRate;\n\t\t\t\tshow(\"loaded signal. samplerate:\",sample_rate);\n\n\t\t\t})\n\t  \t\t\t\talert(\"loaded data\");\n\t  \t};\n\tfr.readAsArrayBuffer( get_dom('file').files[0]); \n}); \nget_dom(\"file\").click()",
+      "status": "[2]<br><span style=\"font-size:8px\">2ms<span></span></span>",
+      "output": "<input type=\"file\" id=\"file\"> <br>loaded signal. samplerate: 44100 <br>",
+      "type": "code"
+    },
+    {
+      "code": "//Generate Oscilators\ngenerateOscilators=function(amplitudes,numSamples, sampleRate) {\n  const calculateFrequencies = (fftSize, sampleRate) =>\n  Array.from({ length: fftSize }, (_, i) => i * (sampleRate / fftSize/2));\n  const frequencies = calculateFrequencies(amplitudes.length, sampleRate);\n  console.log(frequencies.length,amplitudes.length);\n  \n  const frame = [];//new Float32Array(numSamples).fill(0); // Initialize the signal buffer\n\n  for (let i = 0; i < amplitudes.length; i++) {\n    const amplitude = amplitudes[i];\n    const frequency = frequencies[i];\n    let signal=[];\n    for (let t = 0; t < numSamples; t++) {\n      const sample = amplitude * Math.sin(2 * Math.PI * frequency * t / sampleRate);\n      signal.push(sample); // Accumulate samples from different oscillators\n    }\n\tframe.push(signal)\n\t\n  }\n\n  return frame;\n}\n\n//Converting frequencies into \ngenerateSignalFromOscillators=function(amplitudes,numSamples, sampleRate) {\n  const calculateFrequencies = (fftSize, sampleRate) =>\n  Array.from({ length: fftSize }, (_, i) => i * (sampleRate / fftSize/2));\n  const frequencies = calculateFrequencies(amplitudes.length, sampleRate);\n  console.log(frequencies.length,amplitudes.length);\n  \n  const signal = new Float32Array(numSamples).fill(0); // Initialize the signal buffer\n\n  for (let i = 0; i < amplitudes.length; i++) {\n    const amplitude = amplitudes[i];\n    const frequency = frequencies[i];\n\n    for (let t = 0; t < numSamples; t++) {\n      const sample = amplitude * Math.sin(2 * Math.PI * frequency * t / sampleRate);\n      signal[t] += sample; // Accumulate samples from different oscillators\n    }\n  }\n\n  return signal;\n}",
+      "status": "[6]<br><span style=\"font-size:8px\">2ms<span></span></span>",
+      "output": "function(amplitudes,numSamples, sampleRate) {\n  const calculateFrequencies = (fftSize, sampleRate) =&gt;\n  Array.from({ length: fftSize }, (_, i) =&gt; i * (sampleRate / fftSize/2));\n  const frequencies = calculateFrequencies(amplitudes.length, sampleRate);\n  console.log(frequencies.length,amplitudes.length);\n  \n  const signal = new Float32Array(numSamples).fill(0); // Initialize the signal buffer\n\n  for (let i = 0; i &lt; amplitudes.length; i++) {\n    const amplitude = amplitudes[i];\n    const frequency = frequencies[i];\n\n    for (let t = 0; t &lt; numSamples; t++) {\n      const sample = amplitude * Math.sin(2 * Math.PI * frequency * t / sampleRate);\n      signal[t] += sample; // Accumulate samples from different oscillators\n    }\n  }\n\n  return signal;\n} <br>",
+      "type": "code"
+    },
+    {
+      "code": "//sample_rate: 44100. samples per second\n// segment_size: 1024. Number of samples per segment\n// hop_size: 512, Number of samples to move between segments\nspectrogram=signal.spectrogram(sample_rate,1024*8)",
+      "status": "[4]<br><span style=\"font-size:8px\">2.293s<span></span></span>",
+      "output": "<p class=\"error\">Object too large to show.</p><br>",
+      "type": "code"
+    },
+    {
+      "code": "spectrogram.shape()",
+      "status": "[5]<br><span style=\"font-size:8px\">2ms<span></span></span>",
+      "output": "[\n  160,\n  4096\n] <br>",
+      "type": "code"
+    },
+    {
+      "code": "buffer=spectrogram.map(s=>generateSignalFromOscillators(s,1024*8,44000))",
+      "status": "[7]<br><span style=\"font-size:8px\">325.326s<span></span></span>",
+      "output": "<p class=\"error\">Object too large to show.</p><br>",
+      "type": "code"
+    },
+    {
+      "code": "playFloat64ArraysSequentially(buffer)",
+      "status": "[9]<br><span style=\"font-size:8px\">40ms<span></span></span>",
+      "output": "",
+      "type": "code"
+    },
+    {
+      "code": "playFloat64ArraysSequentially([signal])",
+      "status": "[8]<br><span style=\"font-size:8px\">432ms<span></span></span>",
+      "output": "",
+      "type": "code"
+    }
+  ],
+  "source": "https://github.com/gopi-suvanam/jsnb",
+  "run_on_load": false
+}
