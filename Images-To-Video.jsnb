@@ -1,0 +1,38 @@
+{
+  "metadata": {
+    "name": "Video from Images and Audio",
+    "language_info": {
+      "name": "JavaScipt",
+      "version": "8.0"
+    }
+  },
+  "jsnbversion": "v0.1",
+  "cells": [
+    {
+      "code": "<h1>Convert Images and Audio into an MP4 Video</h1>\n<h3>Choose Images</h3>\n<input type=\"file\" id=\"imageInput\" multiple accept=\"image/*\">\n  <h3>Choose Audio</h3>\n<input type=\"file\" id=\"audioInput\" multiple accept=\"audio/*\">\n\n",
+      "status": "",
+      "output": "<h1>Convert Images and Audio into an MP4 Video</h1>\n<h3>Choose Images</h3>\n<input type=\"file\" id=\"imageInput\" multiple=\"\" accept=\"image/*\">\n  <h3>Choose Audio</h3>\n<input type=\"file\" id=\"audioInput\" multiple=\"\" accept=\"audio/*\">\n\n",
+      "type": "html"
+    },
+    {
+      "code": "//Code for loading images\n imagesArray = [];\nfunction loadImages() {\n  const fileInput = document.getElementById('ImageInput');\n  const imageContainer = document.getElementById('imageContainer');\n  \n  const files = fileInput.files;\n  \n\n  for (let i = 0; i < files.length; i++) {\n    const reader = new FileReader();\n    const file = files[i];\n\n    reader.onload = function(event) {\n      const image = new Image();\n      image.src = event.target.result;\n\n      imagesArray.push(image);\n\n      // Display image on the page\n      const imgElement = document.createElement('img');\n      imgElement.src = event.target.result;\n      imgElement.style.maxWidth = '200px'; // Adjust as needed\n      imgElement.style.maxHeight = '200px'; // Adjust as needed\n      imageContainer.appendChild(imgElement);\n    };\n\n    reader.readAsDataURL(file);\n  }\n\n  // You can use the imagesArray here for further processing\n  console.log('Images loaded:', imagesArray);\n}\nshow('<b>Press this button after selecting the image files</b>')\nshow('<button onclick=\"loadImages()\">Load Images</button>')",
+      "status": "[7]<br><span style=\"font-size:8px\">0ms<span></span></span>",
+      "output": "<b>Press this button after selecting the image files</b> <br><button onclick=\"loadImages()\">Load Images</button> <br>",
+      "type": "code"
+    },
+    {
+      "code": " audioSource = null;\nfunction loadAudio() {\n  const fileInput = document.getElementById('audioInput');\n  const mediaContainer = document.getElementById('mediaContainer');\n  \n  const files = fileInput.files;\n\nif (file.type.startsWith('audio/')) {\n      reader.onload = function(event) {\n        audioSource = event.target.result;\n\n        // Display audio controls on the page\n        const audioElement = document.createElement('audio');\n        audioElement.controls = true;\n        audioElement.src = audioSource;\n        mediaContainer.appendChild(audioElement);\n      };\n\n      reader.readAsDataURL(file);\n    }\n\n\n  // You can use the imagesArray and audioSource here for further processing\n  console.log('Audio loaded:', audioSource);\n}\nshow('<b>Press this button after selecting the audio file</b>')\nshow('<button onclick=\"loadAudio()\">Load Audio</button>')\n",
+      "status": "[8]<br><span style=\"font-size:8px\">1ms<span></span></span>",
+      "output": "<b>Press this button after selecting the audio file</b> <br><button onclick=\"loadAudio()\">Load Audio</button> <br>",
+      "type": "code"
+    },
+    {
+      "code": "function createVideo(imagesArray, audioSource) {\n  const canvas = document.createElement('canvas');\n  const ctx = canvas.getContext('2d');\n\n  const videoWidth = /* define your video width */;\n  const videoHeight = /* define your video height */;\n\n  canvas.width = videoWidth;\n  canvas.height = videoHeight;\n\n  const fps = 30; // Frames per second\n  const frameDuration = 1000 / fps;\n  const totalFrames = imagesArray.length;\n\n  const audio = new Audio(audioSource);\n\n  audio.addEventListener('canplaythrough', () => {\n    const audioDuration = audio.duration * 1000; // Convert audio duration to milliseconds\n\n    const renderVideo = (frame) => {\n      if (frame < totalFrames) {\n        ctx.clearRect(0, 0, videoWidth, videoHeight);\n        ctx.drawImage(imagesArray[frame], 0, 0, videoWidth, videoHeight);\n\n        // Draw the current frame on the canvas\n        // Adjust image rendering as needed\n\n        setTimeout(() => {\n          renderVideo(frame + 1);\n        }, frameDuration);\n      } else {\n        // Video rendering is done\n        console.log('Video rendering completed!');\n\n        // Initialize MediaRecorder\n        const stream = canvas.captureStream(fps);\n        const chunks = [];\n        const mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });\n\n        mediaRecorder.ondataavailable = (event) => {\n          if (event.data.size > 0) {\n            chunks.push(event.data);\n          }\n        };\n\n        mediaRecorder.onstop = () => {\n          const videoBlob = new Blob(chunks, { type: 'video/webm' });\n\n          // Create download link for the video\n          const downloadLink = document.createElement('a');\n          downloadLink.href = URL.createObjectURL(videoBlob);\n          downloadLink.download = 'generated_video.webm';\n          downloadLink.textContent = 'Download Video';\n\n          curr_eell().appendChild(downloadLink); // Append download link to the body or any container\n        };\n\n        // Start recording\n        mediaRecorder.start();\n\n        // Start playing audio when recording begins\n        audio.play();\n\n        // Record for the duration of the audio\n        setTimeout(() => {\n          mediaRecorder.stop();\n        }, audioDuration);\n      }\n    };\n\n    // Start rendering the video frames\n    renderVideo(0);\n  });\n\n  document.body.appendChild(canvas); // Append the canvas to the body or any container\n}\n\n// Usage:\n// Pass your imagesArray and audioSource to create and download the video\ncreateVideo(imagesArray, audioSource);\n",
+      "status": "[-]",
+      "output": "<p class=\"error\">Unexpected token ';'</p>",
+      "type": "code"
+    }
+  ],
+  "source": "https://github.com/gopi-suvanam/jsnb",
+  "run_on_load": false
+}
